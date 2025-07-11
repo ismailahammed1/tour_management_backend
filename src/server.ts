@@ -5,14 +5,16 @@ import { Server } from "http";
 
 import mongoose from "mongoose";
 import app from "./app";
-const MONGO_URI = process.env.MONGO_URL || "mongodb://localhost:27017/";
+import { envVars  } from "./app/config/env";
 let server: Server;
 
 const StartServer = async () => {
+  console.log(envVars.NODE_ENV);
+  
   try {
-    await mongoose.connect(MONGO_URI);
-    server = app.listen(5000, () => {
-      console.log("welcome to ture club");
+    await mongoose.connect(envVars.MONGO_URL);
+    server = app.listen(envVars.PORT, () => {
+      console.log(`welcome to ture club ${envVars.PORT}`);
     });
   } catch (error) {
     console.log(error);
