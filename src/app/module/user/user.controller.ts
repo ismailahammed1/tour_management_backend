@@ -1,22 +1,40 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { userService } from "./user.services";
+import catchAsync from "../../utils/catchAsync";
+import httpStatus from "http-status-codes";
+import sendResponse from "../../utils/sendResponse";
 
-const createUser = async (req: Request, res: Response) => {
-  try {
-   
-    const user=await userService.createUser(req.body)
-    res.status(201).json({
-        massage:"User Create Successfully",
-        user
-    })
-  } catch (err:any) {
-    res.status(400).json({
-        massage:`Something went wrong${err.massage}`,
-
-    })
-    
+const createUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await userService.createUser(req.body);
+    // res.status(201).json({
+    //   success: true,
+    //   message: "User created successfully",
+    //   user,
+    // });
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "User created successfully",
+      data: user,
+    });
   }
-};
+);
+const getAllUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await userService.getAllUser();
 
-export default { createUser };
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "All Users Retrieved Successfully",
+      data: result.data,
+      meta: result.meta,
+    });
+  }
+);
+
+
+export default { createUser, getAllUser };
