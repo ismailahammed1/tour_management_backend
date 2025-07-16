@@ -13,7 +13,7 @@ export enum Role{
  * google authentication
  */
 export interface IAuthProviver{
-    provider:string;//goole ,credintial
+    provider:"gooogle"|"credintial";//goole ,credintial
     providerID:string;
 }
 
