@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { NextFunction, Request, Response } from "express";
-import { userService } from "./user.services";
+
 import catchAsync from "../../utils/catchAsync";
 import httpStatus from "http-status-codes";
 import sendResponse from "../../utils/sendResponse";
+import { JwtPayload } from "jsonwebtoken";
+import { userService } from "./user.services";
 
 const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -18,6 +20,24 @@ const createUser = catchAsync(
       success: true,
       statusCode: httpStatus.CREATED,
       message: "User created successfully",
+      data: user,
+    });
+  }
+);
+const updateUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId=req.params.id
+    const verifiedToken = req.user;
+
+    const payload = req.body;
+    const user = await userService.updateUser(userId, payload, verifiedToken as JwtPayload)
+    
+    
+   
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "User Updated Successfully",
       data: user,
     });
   }
@@ -37,4 +57,4 @@ const getAllUser = catchAsync(
 );
 
 
-export default { createUser, getAllUser };
+export default { createUser, getAllUser,updateUser };
