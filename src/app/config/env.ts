@@ -5,11 +5,25 @@ interface EnvConfig {
   PORT: string;
   MONGO_URL: string;
   NODE_ENV: "development" | "production";
+  BCRYPT_SALT_ROUND: string;
+  jwt_secret: string;
+  jwt_Expired: string;
+  SUPER_ADMIN_PASSWROD: string;
+  SUPER_ADMIN_EMAIL: string;
 }
 
 const loadEnvVariables = (): EnvConfig => {
-  const requiredEnvVariables: string[] = ["PORT", "MONGO_URL", "NODE_ENV"];
-  
+  const requiredEnvVariables: string[] = [
+    "PORT",
+    "MONGO_URL",
+    "NODE_ENV",
+    "jwt_secret",
+    "jwt_Expired",
+    "BCRYPT_SALT_ROUND",
+    "SUPER_ADMIN_EMAIL",
+    "SUPER_ADMIN_PASSWROD",
+  ];
+
   requiredEnvVariables.forEach((name) => {
     if (!process.env[name]) {
       throw new Error(`Missing environment variable: ${name}`);
@@ -21,6 +35,11 @@ const loadEnvVariables = (): EnvConfig => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     MONGO_URL: process.env.MONGO_URL!,
     NODE_ENV: process.env.NODE_ENV as "development" | "production",
+    jwt_secret: process.env.jwt_secret as string,
+    jwt_Expired: process.env.jwt_Expired as string,
+    BCRYPT_SALT_ROUND: process.env.BCRYPT_SALT_ROUND as string,
+    SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
+    SUPER_ADMIN_PASSWROD: process.env.SUPER_ADMIN_PASSWROD as string,
   };
 };
 

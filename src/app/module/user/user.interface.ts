@@ -11,9 +11,15 @@ export enum Role{
 /**
  * emaii,password
  * google authentication
+ * 
+ * 
  */
+export enum AuthProviderType {
+  GOOGLE = "google",
+  CREDENTIAL = "credential",
+}
 export interface IAuthProviver{
-    provider:"gooogle"|"credintial";//goole ,credintial
+    provider:AuthProviderType;//goole ,credintial
     providerID:string;
 }
 
@@ -32,9 +38,9 @@ export interface Iuser{
     address?:string;
     isDeleted?:string;
     isActive?:isActive;
-    isVerified?:string;
+    isVerified?:boolean;
 
-    auths:IAuthProviver;
+    auths:IAuthProviver[];
     role:Role;
     bookings?:Types.ObjectId[];
     guides?:Types.ObjectId[];
