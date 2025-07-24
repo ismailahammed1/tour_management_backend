@@ -8,6 +8,10 @@ import { authSevice } from "./auth.service";
 const credintialsLogin= catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const loginInfo=await authSevice.credintialsLogin(req.body)
+    res.cookie("refreshToken",loginInfo.refreshToken,{
+      httpOnly:true,
+      secure:false
+    })
 
     sendResponse(res, {
       success: true,
@@ -17,7 +21,21 @@ const credintialsLogin= catchAsync(
     });
   }
 )
+const getNewUserToken= catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const refreshToken=req.cookies.refreshToken
+    const tokenInfo=await authSevice.getNewUserToken(refreshToken as string)
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "User login successfully",
+      data:tokenInfo,
+    });
+  }
+)
 
 export const authControllers={
-    credintialsLogin
+    credintialsLogin,
+    getNewUserToken
 }
