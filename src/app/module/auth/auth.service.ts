@@ -3,8 +3,8 @@ import { User } from "../user/user.model";
 import httpStatus from "http-status-codes";
 import bcryptjs from "bcryptjs";
 import appError from "../../errorHelpers/AppError";
-import { generatToken } from "../../utils/jwt";
-import { envVars } from "../../config/env";
+import { createNewAccessTokenWithRefreshToken, createUserToken } from "../../utils/userToken";
+
 
 const credintialsLogin = async (payload: Partial<Iuser>) => {
   const { email, password } = payload;
@@ -20,17 +20,24 @@ const credintialsLogin = async (payload: Partial<Iuser>) => {
   if (!isPasswordMatched) {
     throw new appError(httpStatus.BAD_REQUEST, "password incorect");
   }
-  const jwtPayload = {
-    userId: isUserExist._id,
-    email: isUserExist.email,
-    role: isUserExist.role,
-  };
+  const userToken = await createUserToken(isUserExist);
 
-  const accessToken=generatToken(jwtPayload, envVars.jwt_secret, envVars.jwt_Expired)
+  const userObj = isUserExist.toObject();
+  delete userObj.password;
   return {
-    accessToken
+    accessToken: userToken.accessToken,
+    refreshToken: userToken.refreshToken,
+    users: userObj,
+  };
+};
+
+const getNewUserToken = async (refreshToken: string) => {
+ const newAccessToken=await createNewAccessTokenWithRefreshToken(refreshToken)
+  return {
+    accessToken:newAccessToken
   };
 };
 export const authSevice = {
   credintialsLogin,
+  getNewUserToken,
 };

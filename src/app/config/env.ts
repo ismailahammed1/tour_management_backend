@@ -8,6 +8,8 @@ interface EnvConfig {
   BCRYPT_SALT_ROUND: string;
   jwt_secret: string;
   jwt_Expired: string;
+  JWT_REFRESH_SECRETS:string;
+  JWT_REFRESH_EXPIRES:string;
   SUPER_ADMIN_PASSWROD: string;
   SUPER_ADMIN_EMAIL: string;
 }
@@ -22,6 +24,8 @@ const loadEnvVariables = (): EnvConfig => {
     "BCRYPT_SALT_ROUND",
     "SUPER_ADMIN_EMAIL",
     "SUPER_ADMIN_PASSWROD",
+    "JWT_REFRESH_SECRETS",
+    "JWT_REFRESH_EXPIRES"
   ];
 
   requiredEnvVariables.forEach((name) => {
@@ -37,6 +41,8 @@ const loadEnvVariables = (): EnvConfig => {
     NODE_ENV: process.env.NODE_ENV as "development" | "production",
     jwt_secret: process.env.jwt_secret as string,
     jwt_Expired: process.env.jwt_Expired as string,
+    JWT_REFRESH_SECRETS:process.env.JWT_REFRESH_SECRETS as string,
+    JWT_REFRESH_EXPIRES:process.env.JWT_REFRESH_EXPIRES as string,
     BCRYPT_SALT_ROUND: process.env.BCRYPT_SALT_ROUND as string,
     SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
     SUPER_ADMIN_PASSWROD: process.env.SUPER_ADMIN_PASSWROD as string,
