@@ -8,6 +8,13 @@ import { authSevice } from "./auth.service";
 const credintialsLogin= catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const loginInfo=await authSevice.credintialsLogin(req.body)
+    
+    // set accessToken
+    res.cookie("accessToken",loginInfo.accessToken,{
+      httpOnly:true,
+      secure:false
+    })
+    // set refreshToken
     res.cookie("refreshToken",loginInfo.refreshToken,{
       httpOnly:true,
       secure:false
